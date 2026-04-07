@@ -1,0 +1,97 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Base profile for all users (passengers and drivers)",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Unique Firebase Auth UID" },
+        "phone": { "type": "string", "description": "Verified phone number" },
+        "role": { "type": "string", "enum": ["passenger", "driver", "admin"], "description": "User role" },
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
+        "createdAt": { "type": "number", "description": "Timestamp of account creation" },
+        "photoURL": { "type": "string", "format": "url" }
+      },
+      "required": ["uid", "phone", "role", "createdAt"]
+    },
+    "DriverProfile": {
+      "title": "Driver Profile",
+      "description": "Extended profile for drivers with vehicle and status info",
+      "type": "object",
+      "properties": {
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "carModel": { "type": "string" },
+        "carColor": { "type": "string" },
+        "plateNumber": { "type": "string" },
+        "documents": {
+          "type": "object",
+          "properties": {
+            "carFront": { "type": "string", "format": "url" },
+            "carBack": { "type": "string", "format": "url" },
+            "nationalId": { "type": "string", "format": "url" },
+            "licenseFront": { "type": "string", "format": "url" },
+            "licenseBack": { "type": "string", "format": "url" }
+          }
+        },
+        "subscriptionExpiry": { "type": "number" },
+        "isOnline": { "type": "boolean" },
+        "currentLocation": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number" },
+            "lng": { "type": "number" }
+          }
+        }
+      },
+      "required": ["status", "carModel", "carColor", "plateNumber", "isOnline"]
+    },
+    "RideRequest": {
+      "title": "Ride Request",
+      "description": "Details of a ride from request to completion",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "passengerId": { "type": "string" },
+        "passengerName": { "type": "string" },
+        "driverId": { "type": "string" },
+        "pickup": {
+          "type": "object",
+          "properties": {
+            "address": { "type": "string" },
+            "lat": { "type": "number" },
+            "lng": { "type": "number" }
+          }
+        },
+        "destination": {
+          "type": "object",
+          "properties": {
+            "address": { "type": "string" },
+            "lat": { "type": "number" },
+            "lng": { "type": "number" }
+          }
+        },
+        "price": { "type": "number" },
+        "status": { "type": "string", "enum": ["searching", "accepted", "arrived", "in_progress", "completed", "cancelled"] },
+        "createdAt": { "type": "number" },
+        "acceptedAt": { "type": "number" },
+        "completedAt": { "type": "number" }
+      },
+      "required": ["passengerId", "pickup", "destination", "price", "status", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile documents"
+    },
+    "/drivers/{userId}": {
+      "schema": "DriverProfile",
+      "description": "Driver-specific data"
+    },
+    "/rides/{rideId}": {
+      "schema": "RideRequest",
+      "description": "Ride request documents"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "RAHHARIDE",
+  "description": "A premium Algerian VTC (ride-hailing) platform featuring real-time tracking, passenger/driver roles, and a subscription-based driver system.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
